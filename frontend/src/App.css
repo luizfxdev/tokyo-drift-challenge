@@ -1,0 +1,629 @@
+/* ===================================
+   RESET E CONFIGURAÇÕES GLOBAIS
+   =================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  position: relative;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* ===================================
+   BACKGROUND VIDEO - FIXADO
+   =================================== */
+.min-h-screen {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+video {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  z-index: 0 !important;
+  pointer-events: none;
+}
+
+/* ===================================
+   CONTAINER PRINCIPAL - TAMANHO IDEAL
+   =================================== */
+.container-wrapper {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2.5rem;
+  padding-left: 4%;
+}
+
+.race-container {
+  width: 100%;
+  max-width: 550px;
+  background: rgba(10, 15, 30, 0.9);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid rgba(0, 255, 255, 0.35);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 0 50px rgba(0, 255, 255, 0.25), inset 0 0 25px rgba(0, 255, 255, 0.06), 0 15px 50px rgba(0, 0, 0, 0.4);
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideIn 0.7s ease-out;
+  transform-origin: left center;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* ===================================
+   SCROLLBAR CUSTOMIZADA
+   =================================== */
+.race-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.race-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.race-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00ffff, #0088ff);
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.race-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00ffff, #00aaff);
+}
+
+/* ===================================
+   HEADER - TAMANHO EQUILIBRADO
+   =================================== */
+.header-section {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(0, 255, 255, 0.35);
+}
+
+.title-main {
+  font-size: 1.9rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #00ffff, #0088ff, #ff00ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.4));
+}
+
+/* ===================================
+   DESCRIÇÃO - COMPACTA
+   =================================== */
+.description-section {
+  margin-bottom: 1.8rem;
+  padding: 1.3rem;
+  background: rgba(0, 0, 0, 0.45);
+  border-left: 4px solid #00ffff;
+  border-radius: 8px;
+  box-shadow: inset 0 0 15px rgba(0, 255, 255, 0.08);
+}
+
+.description-text {
+  color: #e0e0e0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.mt-3 {
+  margin-top: 0.9rem;
+}
+
+.highlight {
+  color: #ff00ff;
+  font-weight: 650;
+  text-shadow: 0 0 8px rgba(255, 0, 255, 0.4);
+}
+
+.highlight-blue {
+  color: #00ffff;
+  font-weight: 650;
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.4);
+}
+
+.highlight-green {
+  color: #00ff88;
+  font-weight: 650;
+  text-shadow: 0 0 8px rgba(0, 255, 136, 0.4);
+}
+
+/* ===================================
+   FORMULÁRIO - COMPACTO
+   =================================== */
+.form-section {
+  margin-bottom: 1.8rem;
+}
+
+.input-grid {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-label {
+  color: #00ffff;
+  font-size: 0.85rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.5);
+}
+
+.input-field {
+  padding: 0.75rem 1rem;
+  background: rgba(0, 0, 0, 0.55);
+  border: 2px solid rgba(0, 255, 255, 0.35);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-weight: 500;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #00ffff;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.45);
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.input-field::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.input-field:hover {
+  border-color: rgba(0, 255, 255, 0.5);
+}
+
+/* Remove setas dos inputs number */
+.input-field::-webkit-outer-spin-button,
+.input-field::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-field[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* ===================================
+   BOTÕES - TAMANHO ADEQUADO
+   =================================== */
+.button-section {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+
+.btn {
+  position: relative;
+  flex: 1;
+  padding: 0.9rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 750;
+  color: white;
+  background: none;
+  border: 2px solid #00ffff;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.btn-calculate {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.22), rgba(0, 136, 255, 0.22));
+  border-color: #00ffff;
+}
+
+.btn-calculate:hover {
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.32), rgba(0, 136, 255, 0.32));
+  border-color: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.btn-return {
+  background: linear-gradient(135deg, rgba(255, 0, 255, 0.22), rgba(255, 0, 128, 0.22));
+  border-color: #ff00ff;
+}
+
+.btn-return:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 255, 0.32), rgba(255, 0, 128, 0.32));
+  border-color: #ff00ff;
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+}
+
+.glitch {
+  text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75), -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+    0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+}
+
+.glitch:hover {
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-3px, 3px);
+  }
+  40% {
+    transform: translate(-3px, -3px);
+  }
+  60% {
+    transform: translate(3px, 3px);
+  }
+  80% {
+    transform: translate(3px, -3px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  animation: none;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ===================================
+   CONTROLE DE ÁUDIO - COMPACTO
+   =================================== */
+.audio-btn {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(0, 255, 255, 0.5);
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 100;
+}
+
+.audio-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  border-color: #00ffff;
+}
+
+.audio-btn:active {
+  transform: scale(1.05);
+}
+
+.audio-btn span {
+  font-size: 1.5rem;
+}
+
+/* ===================================
+   RESULTADO
+   =================================== */
+.result-section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(0, 255, 255, 0.35);
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.result-show {
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-title {
+  color: #00ffff;
+  font-size: 1.4rem;
+  font-weight: 750;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  text-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+}
+
+/* ===================================
+   TERMINAL
+   =================================== */
+.terminal {
+  background: rgba(0, 0, 0, 0.75);
+  border: 2px solid rgba(0, 255, 255, 0.35);
+  border-radius: 10px;
+  padding: 1.5rem;
+  font-family: 'Courier New', monospace;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.terminal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.terminal::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.terminal::-webkit-scrollbar-thumb {
+  background: #00ffff;
+  border-radius: 3px;
+}
+
+.terminal-line {
+  color: #00ff88;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 0.3rem;
+  opacity: 0;
+  animation: typeLine 0.3s ease-out forwards;
+}
+
+@keyframes typeLine {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.terminal-final {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.22), rgba(255, 0, 255, 0.22));
+  border: 2px solid #00ffff;
+  border-radius: 10px;
+  opacity: 0;
+  animation: finalPulse 1s ease-out forwards;
+}
+
+@keyframes finalPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.final-winner {
+  color: #ffff00;
+  font-size: 1.3rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 0.8rem;
+  text-shadow: 0 0 15px rgba(255, 255, 0, 0.85);
+  animation: winnerGlow 2s ease-in-out infinite;
+}
+
+@keyframes winnerGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 15px rgba(255, 255, 0, 0.85);
+  }
+  50% {
+    text-shadow: 0 0 28px rgba(255, 255, 0, 1);
+  }
+}
+
+.final-stats {
+  color: #00ffff;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 650;
+}
+
+/* ===================================
+   RESPONSIVIDADE
+   =================================== */
+@media (max-width: 1400px) {
+  .container-wrapper {
+    padding-left: 3%;
+  }
+
+  .race-container {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .container-wrapper {
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .race-container {
+    max-width: 500px;
+  }
+
+  .title-main {
+    font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container-wrapper {
+    padding: 1.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .race-container {
+    max-width: 100%;
+    padding: 1.8rem;
+  }
+
+  .title-main {
+    font-size: 1.5rem;
+  }
+
+  .button-section {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .audio-btn {
+    width: 50px;
+    height: 50px;
+  }
+
+  .audio-btn span {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title-main {
+    font-size: 1.3rem;
+  }
+
+  .description-text {
+    font-size: 0.85rem;
+  }
+
+  .input-label {
+    font-size: 0.8rem;
+  }
+
+  .input-field {
+    font-size: 0.9rem;
+    padding: 0.7rem;
+  }
+
+  .btn {
+    font-size: 0.9rem;
+    padding: 0.8rem 1.5rem;
+  }
+
+  .race-container {
+    padding: 1.5rem;
+  }
+}
+
+/* ===================================
+   UTILIDADES TAILWIND
+   =================================== */
+.fixed {
+  position: fixed;
+}
+
+.top-6 {
+  top: 1.5rem;
+}
+
+.right-6 {
+  right: 1.5rem;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.object-cover {
+  object-fit: cover;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.relative {
+  position: relative;
+}
