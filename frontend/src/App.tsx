@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import './App.css';
 
 interface RaceInput {
-  distancia: number;
-  velocidadeDesafiante: number;
-  velocidadeDK: number;
-  bonusDriftDesafiante: number;
-  bonusDriftDK: number;
+  distancia: string;
+  velocidadeDesafiante: string;
+  velocidadeDK: string;
+  bonusDriftDesafiante: string;
+  bonusDriftDK: string;
 }
 
 interface RaceResult {
@@ -15,17 +15,22 @@ interface RaceResult {
   velocidadeMaxima: number;
   tempoDesafiante: number;
   tempoDK: number;
-  detalhes: string[];
+  distancia: number;
+  velocidadeDesafiante: number;
+  velocidadeDK: number;
+  bonusDriftDesafiante: number;
+  bonusDriftDK: number;
+  diferenca: number;
 }
 
 const TokyoDriftApp: React.FC = () => {
   const [audioPlaying, setAudioPlaying] = useState(false);
   const [formData, setFormData] = useState<RaceInput>({
-    distancia: 0,
-    velocidadeDesafiante: 0,
-    velocidadeDK: 0,
-    bonusDriftDesafiante: 0,
-    bonusDriftDK: 0
+    distancia: '',
+    velocidadeDesafiante: '',
+    velocidadeDK: '',
+    bonusDriftDesafiante: '',
+    bonusDriftDK: ''
   });
   const [result, setResult] = useState<RaceResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,7 +42,9 @@ const TokyoDriftApp: React.FC = () => {
 
   useEffect(() => {
     if (showResult && resultRef.current) {
-      resultRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
     }
   }, [showResult]);
 
@@ -56,43 +63,37 @@ const TokyoDriftApp: React.FC = () => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: parseFloat(value) || 0
+      [name]: value
     }));
   };
 
   const calculateRace = () => {
+    // Validação básica
+    const distancia = parseFloat(formData.distancia);
+    const velocidadeDesafiante = parseFloat(formData.velocidadeDesafiante);
+    const velocidadeDK = parseFloat(formData.velocidadeDK);
+
+    if (!distancia || !velocidadeDesafiante || !velocidadeDK) {
+      alert('⚠️ Por favor, preencha pelo menos Distância e as Velocidades!');
+      return;
+    }
+
     setLoading(true);
 
     setTimeout(() => {
-      const { distancia, velocidadeDesafiante, velocidadeDK, bonusDriftDesafiante, bonusDriftDK } = formData;
+      const bonusDriftDesafiante = parseFloat(formData.bonusDriftDesafiante) || 0;
+      const bonusDriftDK = parseFloat(formData.bonusDriftDK) || 0;
 
-      const tempoDesafiante = (distancia / velocidadeDesafiante) * 60 - bonusDriftDesafiante;
-      const tempoDK = (distancia / velocidadeDK) * 60 - bonusDriftDK;
+      const tempoBaseDesafiante = (distancia / velocidadeDesafiante) * 60;
+      const tempoBaseDK = (distancia / velocidadeDK) * 60;
 
-      const vencedor = tempoDesafiante < tempoDK ? 'Desafiante (Mazda RX-7)' : 'DK (Nissan 350Z)';
+      const tempoDesafiante = tempoBaseDesafiante - bonusDriftDesafiante;
+      const tempoDK = tempoBaseDK - bonusDriftDK;
+
+      const vencedor = tempoDesafiante < tempoDK ? 'Mazda RX-7' : 'Nissan 350Z';
       const tempoVencedor = Math.min(tempoDesafiante, tempoDK);
       const velocidadeMaxima = Math.max(velocidadeDesafiante, velocidadeDK);
-
-      const detalhes = [
-        `> Iniciando cálculo da corrida...`,
-        `> Distância do percurso: ${distancia} km`,
-        ``,
-        `> MAZDA RX-7 (Desafiante):`,
-        `  - Velocidade média: ${velocidadeDesafiante} km/h`,
-        `  - Bônus drift: ${bonusDriftDesafiante}s`,
-        `  - Tempo base: ${((distancia / velocidadeDesafiante) * 60).toFixed(2)} min`,
-        `  - Tempo final: ${tempoDesafiante.toFixed(2)} min`,
-        ``,
-        `> NISSAN 350Z (DK):`,
-        `  - Velocidade média: ${velocidadeDK} km/h`,
-        `  - Bônus drift: ${bonusDriftDK}s`,
-        `  - Tempo base: ${((distancia / velocidadeDK) * 60).toFixed(2)} min`,
-        `  - Tempo final: ${tempoDK.toFixed(2)} min`,
-        ``,
-        `> Comparando resultados...`,
-        `> Diferença: ${Math.abs(tempoDesafiante - tempoDK).toFixed(2)} min`,
-        ``
-      ];
+      const diferenca = Math.abs(tempoDesafiante - tempoDK);
 
       setResult({
         vencedor,
@@ -100,12 +101,17 @@ const TokyoDriftApp: React.FC = () => {
         velocidadeMaxima,
         tempoDesafiante,
         tempoDK,
-        detalhes
+        distancia,
+        velocidadeDesafiante,
+        velocidadeDK,
+        bonusDriftDesafiante,
+        bonusDriftDK,
+        diferenca
       });
 
       setShowResult(true);
       setLoading(false);
-    }, 1000);
+    }, 1200);
   };
 
   const handleReturn = () => {
@@ -113,26 +119,18 @@ const TokyoDriftApp: React.FC = () => {
     setTimeout(() => {
       setResult(null);
       setFormData({
-        distancia: 0,
-        velocidadeDesafiante: 0,
-        velocidadeDK: 0,
-        bonusDriftDesafiante: 0,
-        bonusDriftDK: 0
+        distancia: '',
+        velocidadeDesafiante: '',
+        velocidadeDK: '',
+        bonusDriftDesafiante: '',
+        bonusDriftDK: ''
       });
-    }, 300);
+    }, 400);
   };
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden">
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="fixed top-0 left-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
-      >
+    <div className="app-container">
+      <video ref={videoRef} autoPlay loop muted playsInline className="background-video">
         <source src="/src/assets/background.mp4" type="video/mp4" />
       </video>
 
@@ -140,129 +138,270 @@ const TokyoDriftApp: React.FC = () => {
         <source src="/src/assets/theme.mp3" type="audio/mpeg" />
       </audio>
 
-      <div className="fixed top-6 right-6 z-50">
-        <button
-          onClick={toggleAudio}
-          className="audio-btn"
-          aria-label={audioPlaying ? 'Pausar música' : 'Tocar música'}
-        >
-          <span className="text-3xl">{audioPlaying ? '⏸️' : '🎵'}</span>
-        </button>
-      </div>
+      <button
+        onClick={toggleAudio}
+        className="audio-control"
+        aria-label={audioPlaying ? 'Pausar música' : 'Tocar música'}
+      >
+        <span>{audioPlaying ? '⏸️' : '🎵'}</span>
+      </button>
 
-      <div className="container-wrapper">
+      <div className="content-wrapper">
         <div className="race-container">
+          {/* Header */}
           <div className="header-section">
-            <h1 className="title-main">Tokyo Drift:Desafiando o DK </h1>
+            <h1 className="main-title">Tokyo Drift: Desafiando o DK</h1>
+            <div className="title-underline"></div>
           </div>
 
+          {/* Descrição */}
           <div className="description-section">
             <p className="description-text">
-              No lendário circuito de Neo-Tóquio, você desafia o <span className="highlight">Drift King (DK)</span> para
-              decidir quem é o verdadeiro rei do asfalto. Você no volante do{' '}
-              <span className="highlight-blue">Mazda RX-7</span>, enfrentando o imponente{' '}
-              <span className="highlight-green">Nissan 350Z</span> do DK.
+              No lendário circuito de <span className="highlight-neon">Neo-Tóquio</span>, você desafia o
+              <span className="highlight-pink"> Drift King (DK)</span> para decidir quem é o verdadeiro rei do asfalto.
             </p>
-            <p className="description-text mt-3">
-              Configure os parâmetros da corrida e descubra quem conquistará a vitória nas ruas iluminadas de Tóquio!
+            <p className="description-text">
+              Você no volante do <span className="highlight-cyan">Mazda RX-7</span>, enfrentando o imponente
+              <span className="highlight-green"> Nissan 350Z</span> do DK nas ruas iluminadas de Tóquio!
             </p>
           </div>
 
+          {/* Formulário */}
           <div className="form-section">
             <div className="input-grid">
-              <div className="input-group">
-                <label className="input-label">Distância (km)</label>
+              <div className="input-wrapper">
+                <label className="input-label">📏 Distância (km)</label>
                 <input
                   type="number"
                   name="distancia"
-                  value={formData.distancia || ''}
+                  value={formData.distancia}
                   onChange={handleInputChange}
                   placeholder="Ex: 5.0"
                   className="input-field"
                   step="0.1"
+                  min="0"
                 />
               </div>
 
-              <div className="input-group">
-                <label className="input-label">Velocidade Mazda RX-7 (km/h)</label>
+              <div className="input-wrapper">
+                <label className="input-label">⚡ Velocidade Mazda RX-7 (km/h)</label>
                 <input
                   type="number"
                   name="velocidadeDesafiante"
-                  value={formData.velocidadeDesafiante || ''}
+                  value={formData.velocidadeDesafiante}
                   onChange={handleInputChange}
                   placeholder="Ex: 100"
                   className="input-field"
+                  step="1"
+                  min="0"
                 />
               </div>
 
-              <div className="input-group">
-                <label className="input-label">Velocidade Nissan 350Z (km/h)</label>
+              <div className="input-wrapper">
+                <label className="input-label">⚡ Velocidade Nissan 350Z (km/h)</label>
                 <input
                   type="number"
                   name="velocidadeDK"
-                  value={formData.velocidadeDK || ''}
+                  value={formData.velocidadeDK}
                   onChange={handleInputChange}
                   placeholder="Ex: 95"
                   className="input-field"
+                  step="1"
+                  min="0"
                 />
               </div>
 
-              <div className="input-group">
-                <label className="input-label">Bônus Drift Mazda (seg)</label>
+              <div className="input-wrapper">
+                <label className="input-label">💨 Bônus Drift Mazda (seg)</label>
                 <input
                   type="number"
                   name="bonusDriftDesafiante"
-                  value={formData.bonusDriftDesafiante || ''}
+                  value={formData.bonusDriftDesafiante}
                   onChange={handleInputChange}
                   placeholder="Ex: 0.2"
                   className="input-field"
                   step="0.1"
+                  min="0"
                 />
               </div>
 
-              <div className="input-group">
-                <label className="input-label">Bônus Drift Nissan (seg)</label>
+              <div className="input-wrapper">
+                <label className="input-label">💨 Bônus Drift Nissan (seg)</label>
                 <input
                   type="number"
                   name="bonusDriftDK"
-                  value={formData.bonusDriftDK || ''}
+                  value={formData.bonusDriftDK}
                   onChange={handleInputChange}
                   placeholder="Ex: 0.0"
                   className="input-field"
                   step="0.1"
+                  min="0"
                 />
               </div>
             </div>
           </div>
 
-          <div className="button-section">
-            <button className="btn glitch btn-calculate" onClick={calculateRace} disabled={loading}>
-              <span>{loading ? 'CALCULANDO...' : 'CALCULAR'}</span>
+          {/* Botões */}
+          <div className="buttons-section">
+            <button className="action-btn calculate-btn" onClick={calculateRace} disabled={loading}>
+              <span className="btn-text">{loading ? 'CALCULANDO...' : 'CALCULAR'}</span>
+              <span className="btn-glow"></span>
             </button>
 
-            <button className="btn glitch btn-return" onClick={handleReturn}>
-              <span>RETORNAR</span>
+            <button className="action-btn return-btn" onClick={handleReturn}>
+              <span className="btn-text">RETORNAR</span>
+              <span className="btn-glow"></span>
             </button>
           </div>
 
+          {/* Resultado */}
           {showResult && result && (
-            <div ref={resultRef} className={`result-section ${showResult ? 'result-show' : ''}`}>
-              <h3 className="result-title">📊 RESULTADO DA CORRIDA</h3>
+            <div ref={resultRef} className="results-section">
+              <div className="results-header">
+                <div className="results-icon">📊</div>
+                <h2 className="results-title">Análise Completa da Corrida</h2>
+              </div>
 
-              <div className="terminal">
-                {result.detalhes.map((linha, index) => (
-                  <div key={index} className="terminal-line" style={{ animationDelay: `${index * 0.1}s` }}>
-                    {linha}
-                  </div>
-                ))}
-
-                <div className="terminal-final" style={{ animationDelay: `${result.detalhes.length * 0.1}s` }}>
-                  <div className="final-winner">🏆 VENCEDOR: {result.vencedor}</div>
-                  <div className="final-stats">
-                    ⏱️ Tempo: {result.tempoVencedor.toFixed(2)} min | 🚀 Velocidade Máxima: {result.velocidadeMaxima}{' '}
-                    km/h
+              {/* Parâmetros */}
+              <div className="result-card params-card">
+                <div className="card-header">
+                  <span className="card-icon">⚙️</span>
+                  <h3 className="card-title">Parâmetros</h3>
+                </div>
+                <div className="card-body">
+                  <div className="info-line">
+                    <span className="info-label">Distância do Percurso:</span>
+                    <span className="info-value">{result.distancia} km</span>
                   </div>
                 </div>
+              </div>
+
+              {/* Mazda RX-7 */}
+              <div className="result-card mazda-card">
+                <div className="card-header mazda-header">
+                  <span className="card-icon">🏎️</span>
+                  <h3 className="card-title">Mazda RX-7 (Desafiante)</h3>
+                </div>
+                <div className="card-body">
+                  <div className="info-line">
+                    <span className="info-label">Velocidade Média:</span>
+                    <span className="info-value">{result.velocidadeDesafiante} km/h</span>
+                  </div>
+                  <div className="info-line">
+                    <span className="info-label">Bônus de Drift:</span>
+                    <span className="info-value">{result.bonusDriftDesafiante}s</span>
+                  </div>
+                  <div className="calculation-steps">
+                    <div className="step">
+                      <span className="step-number">1.</span>
+                      <span className="step-text">
+                        Tempo base: ({result.distancia} ÷ {result.velocidadeDesafiante}) × 60
+                      </span>
+                      <span className="step-result">
+                        = {((result.distancia / result.velocidadeDesafiante) * 60).toFixed(3)} min
+                      </span>
+                    </div>
+                    <div className="step">
+                      <span className="step-number">2.</span>
+                      <span className="step-text">
+                        Aplicar bônus: {((result.distancia / result.velocidadeDesafiante) * 60).toFixed(3)} -{' '}
+                        {result.bonusDriftDesafiante}
+                      </span>
+                      <span className="step-result">= {result.tempoDesafiante.toFixed(3)} min</span>
+                    </div>
+                  </div>
+                  <div className="final-time mazda-time">
+                    <span className="time-label">⏱️ Tempo Final:</span>
+                    <span className="time-value">{result.tempoDesafiante.toFixed(3)} min</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Nissan 350Z */}
+              <div className="result-card nissan-card">
+                <div className="card-header nissan-header">
+                  <span className="card-icon">🏎️</span>
+                  <h3 className="card-title">Nissan 350Z (DK)</h3>
+                </div>
+                <div className="card-body">
+                  <div className="info-line">
+                    <span className="info-label">Velocidade Média:</span>
+                    <span className="info-value">{result.velocidadeDK} km/h</span>
+                  </div>
+                  <div className="info-line">
+                    <span className="info-label">Bônus de Drift:</span>
+                    <span className="info-value">{result.bonusDriftDK}s</span>
+                  </div>
+                  <div className="calculation-steps">
+                    <div className="step">
+                      <span className="step-number">1.</span>
+                      <span className="step-text">
+                        Tempo base: ({result.distancia} ÷ {result.velocidadeDK}) × 60
+                      </span>
+                      <span className="step-result">
+                        = {((result.distancia / result.velocidadeDK) * 60).toFixed(3)} min
+                      </span>
+                    </div>
+                    <div className="step">
+                      <span className="step-number">2.</span>
+                      <span className="step-text">
+                        Aplicar bônus: {((result.distancia / result.velocidadeDK) * 60).toFixed(3)} -{' '}
+                        {result.bonusDriftDK}
+                      </span>
+                      <span className="step-result">= {result.tempoDK.toFixed(3)} min</span>
+                    </div>
+                  </div>
+                  <div className="final-time nissan-time">
+                    <span className="time-label">⏱️ Tempo Final:</span>
+                    <span className="time-value">{result.tempoDK.toFixed(3)} min</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Comparação */}
+              <div className="result-card comparison-card">
+                <div className="card-header comparison-header">
+                  <span className="card-icon">⚔️</span>
+                  <h3 className="card-title">Comparação</h3>
+                </div>
+                <div className="card-body">
+                  <div className="comparison-line">
+                    <span className="comp-car mazda-text">Mazda RX-7:</span>
+                    <span className="comp-time">{result.tempoDesafiante.toFixed(3)} min</span>
+                  </div>
+                  <div className="comparison-line">
+                    <span className="comp-car nissan-text">Nissan 350Z:</span>
+                    <span className="comp-time">{result.tempoDK.toFixed(3)} min</span>
+                  </div>
+                  <div className="comparison-line difference-line">
+                    <span className="comp-car">Diferença:</span>
+                    <span className="comp-diff">
+                      {result.diferenca.toFixed(3)} min ({(result.diferenca * 60).toFixed(1)}s)
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vencedor DESTAQUE MÁXIMO */}
+              <div className="winner-showcase">
+                <div className="winner-trophy">🏆</div>
+                <div className="winner-content">
+                  <div className="winner-label">VENCEDOR</div>
+                  <div className="winner-name">{result.vencedor}</div>
+                  <div className="winner-stats">
+                    <div className="stat-box">
+                      <div className="stat-icon">⏱️</div>
+                      <div className="stat-label">Tempo</div>
+                      <div className="stat-value">{result.tempoVencedor.toFixed(3)} min</div>
+                    </div>
+                    <div className="stat-box">
+                      <div className="stat-icon">🚀</div>
+                      <div className="stat-label">Vel. Máx.</div>
+                      <div className="stat-value">{result.velocidadeMaxima} km/h</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="winner-flames">🔥🔥🔥</div>
               </div>
             </div>
           )}
