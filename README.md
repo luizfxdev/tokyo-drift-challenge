@@ -336,7 +336,11 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ## 👨‍💻 Autor
 
-**Luiz FX** - [GitHub](https://github.com/luizfxdev)
+**Luiz Felipe de Oliveira**
+
+- GitHub: [@luizfxdev](https://github.com/luizfxdev)
+- Linkedin: [in/luizfxdev](https://www.linkedin.com/in/luizfxdev)
+- Portfólio: [luizfxdev.com.br](https://luizfxdev.com.br)
 
 ---
 
